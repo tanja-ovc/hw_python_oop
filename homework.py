@@ -1,13 +1,11 @@
 import datetime as dt
 
-today = dt.date.today()
-
 
 class Record:
 
     def __init__(self, amount, comment, date=None):
         if date is None:
-            self.date = today
+            self.date = dt.date.today()
         else:
             date_to_be = dt.datetime.strptime(date, '%d.%m.%Y')
             self.date = date_to_be.date()
@@ -27,7 +25,7 @@ class Calculator:
     def get_today_stats(self):
         total_amount_today = sum(
             [each_record.amount for each_record in self.records
-             if each_record.date == today]
+             if each_record.date == dt.date.today()]
         )
         return total_amount_today
 
@@ -37,10 +35,10 @@ class Calculator:
         return leftover_today
 
     def get_week_stats(self):
-        a_week_ago = today - dt.timedelta(days=7)
+        a_week_ago = dt.date.today() - dt.timedelta(days=7)
         total_amount_over_7days = sum(
             each_record.amount for each_record in self.records
-            if a_week_ago < each_record.date <= today
+            if a_week_ago < each_record.date <= dt.date.today()
         )
         return total_amount_over_7days
 
@@ -48,9 +46,8 @@ class Calculator:
 class CaloriesCalculator(Calculator):
 
     def get_calories_remained(self):
-        spent_today = self.get_today_stats()
         leftover_today = self.what_is_left_today()
-        if spent_today < self.limit:
+        if leftover_today > 0:
             return (
                 'Сегодня можно съесть что-нибудь ещё, но с общей '
                 f'калорийностью не более {leftover_today} кКал'
@@ -65,11 +62,11 @@ class CashCalculator(Calculator):
     EURO_RATE = 88.164
 
     def get_today_cash_remained(self, currency):
-        currencies_dict = {'rub': [self.RUB_RATE, 'руб'],
-                           'usd': [self.USD_RATE, 'USD'],
-                           'eur': [self.EURO_RATE, 'Euro']}
+        currencies_and_rates = {'rub': [self.RUB_RATE, 'руб'],
+                                'usd': [self.USD_RATE, 'USD'],
+                                'eur': [self.EURO_RATE, 'Euro']}
 
-        if currency not in currencies_dict:
+        if currency not in currencies_and_rates:
             raise ValueError(f'Валюта "{currency}" не распознана')
 
         leftover_today = self.what_is_left_today()
@@ -77,7 +74,7 @@ class CashCalculator(Calculator):
         if leftover_today == 0:
             return 'Денег нет, держись'
 
-        currency_rate, currency_name = currencies_dict[currency]
+        currency_rate, currency_name = currencies_and_rates[currency]
         leftover_today_converted = (leftover_today / currency_rate)
         leftover_today_rounded = round((leftover_today_converted), 2)
         leftover_today_absolute = abs(leftover_today_rounded)

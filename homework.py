@@ -23,9 +23,10 @@ class Calculator:
         self.records.append(record)
 
     def get_today_stats(self):
+        today = dt.date.today()
         total_amount_today = sum(
             [each_record.amount for each_record in self.records
-             if each_record.date == dt.date.today()]
+             if each_record.date == today]
         )
         return total_amount_today
 
@@ -35,10 +36,11 @@ class Calculator:
         return leftover_today
 
     def get_week_stats(self):
-        a_week_ago = dt.date.today() - dt.timedelta(days=7)
+        today = dt.date.today()
+        a_week_ago = today - dt.timedelta(days=7)
         total_amount_over_7days = sum(
             each_record.amount for each_record in self.records
-            if a_week_ago < each_record.date <= dt.date.today()
+            if a_week_ago < each_record.date <= today
         )
         return total_amount_over_7days
 

@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import pytest
 
 try:
-    import homework
+    import calculator
 except ImportError:
     pass
 
@@ -31,7 +31,7 @@ def data_records():
             date = datetime.now() + timedelta(days=random.randint(1, 6))
         else:
             date = datetime(2019, 9, 1)
-        data.append(homework.Record(amount=amount, comment=f'Test {idx}', date=date.strftime('%d.%m.%Y')))
+        data.append(calculator.Record(amount=amount, comment=f'Test {idx}', date=date.strftime('%d.%m.%Y')))
     random.shuffle(data)
     return data, today_count * amount, week_count * amount
 

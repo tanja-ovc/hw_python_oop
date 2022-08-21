@@ -55,7 +55,7 @@ class CaloriesCalculator(Calculator):
                 f'калорийностью не более {leftover_today} кКал'
             )
         else:
-            return 'Хватит есть!'
+            return 'Сегодня больше нельзя есть!'
 
 
 class CashCalculator(Calculator):
@@ -88,19 +88,19 @@ class CashCalculator(Calculator):
             )
         elif leftover_today < 0:
             return (
-                'Денег нет, держись: твой долг - '
-                f'{leftover_today_absolute} {currency_name}'
+                'Ты превысил расход, допустимый на сегодня: твой баланс '
+                f'-{leftover_today_absolute} {currency_name}'
             )
 
 
 if __name__ == "__main__":
-    record_food_1 = Record(amount=150, comment='сырок', date='13.06.2021')
+    record_food_1 = Record(amount=150, comment='сырок', date='20.08.2022')
     record_food_2 = Record(amount=350, comment='кура с гречей')
     record_food_3 = Record(amount=200, comment='йогурт', date='01.12.1998')
     record_food_4 = Record(amount=333, comment='Choya Classic')
 
     record_cash_1 = Record(3550, 'линзы', '13.06.2021')
-    record_cash_2 = Record(7900, 'сумка', '10.07.2017')
+    record_cash_2 = Record(7900, 'сумка', '19.08.2022')
     record_cash_3 = Record(255, '"Тройка"')
 
     calories_calculator = CaloriesCalculator(2400)
@@ -116,10 +116,10 @@ if __name__ == "__main__":
     cash_calculator.add_record(record_cash_2)
     cash_calculator.add_record(record_cash_3)
 
-    print(calories_calculator.get_today_stats())
-    print(calories_calculator.get_week_stats())
+    print(f'Калорий потреблено сегодня: {calories_calculator.get_today_stats()}')
+    print(f'Калорий потреблено на этой неделе: {calories_calculator.get_week_stats()}')
     print(calories_calculator.get_calories_remained())
 
-    print(cash_calculator.get_today_stats())
-    print(cash_calculator.get_week_stats())
-    print(cash_calculator.get_today_cash_remained('eur'))
+    print(f'Денег потрачено сегодня: {cash_calculator.get_today_stats()}')
+    print(f'Денег потрачено на этой неделе: {cash_calculator.get_week_stats()}')
+    print(cash_calculator.get_today_cash_remained('rub'))
